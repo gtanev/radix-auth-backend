@@ -5,6 +5,7 @@ import com.radix.auth.domain.user.exception.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 class UserService {
@@ -18,6 +19,7 @@ class UserService {
     this.passwordEncoder = passwordEncoder;
   }
 
+  @Transactional
   User register(User user) throws UserAlreadyExistsException {
     if (exists(user)) {
       throw new UserAlreadyExistsException("A user with the email address " + user.getEmail() + " already exists.");
@@ -32,6 +34,7 @@ class UserService {
     return userRepository.save(newUser);
   }
 
+  @Transactional
   User login(User user) throws InvalidCredentialsException {
     if (!exists(user)) {
       throw new InvalidCredentialsException("A user with the email address " + user.getEmail() + " doesn't exist.");
